@@ -249,6 +249,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 943623840}
     m_Modifications:
+    - target: {fileID: 1111685776836075222, guid: a069bf80554068242b83fff53fed8ff9, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1111685776845466968, guid: a069bf80554068242b83fff53fed8ff9, type: 3}
       propertyPath: m_Name
       value: Muscle Cat
@@ -407,11 +411,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &943623833 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+  m_PrefabInstance: {fileID: 4205345130147637756}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &943623840 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
   m_PrefabInstance: {fileID: 4205345130147637756}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &943623841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943623833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522c805ebe976274f9e182ea2e7e82b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &947846740 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1111685776845466898, guid: a069bf80554068242b83fff53fed8ff9, type: 3}
@@ -1160,7 +1181,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1395234011}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 943623841}
   m_SourcePrefab: {fileID: 100100000, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
 --- !u!4 &4205345130147637757 stripped
 Transform:
