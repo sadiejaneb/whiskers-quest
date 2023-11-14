@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class SlimeDamage : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Animator animator;
+    public int health = 100; // Example health value
+
     void Start()
     {
-        
-    }
-    public void ApplyDamage(int damage)
-    {
-        //reduce health here
-       
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ApplyDamage(int damage)
     {
-        
+        health -= damage;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        animator.SetTrigger("IsDead"); // Trigger the death animation
+       // GetComponent<Collider>().enabled = false; // Disable the Collider
     }
 }
