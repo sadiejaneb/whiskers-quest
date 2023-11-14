@@ -5,6 +5,7 @@ public class PlayerAttackController : MonoBehaviour
 {
     private Animator animator;
     private bool isPunching = false; // flag to check if the punch animation is playing
+    public int punchDamage = 33; // damage to apply when punching
 
     void Start()
     {
@@ -43,6 +44,30 @@ public class PlayerAttackController : MonoBehaviour
     public void Hit()
     {
         // Your code here, e.g., applying damage to an enemy
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (isPunching)
+        {
+            if (other.CompareTag("Bat"))
+            {
+                Debug.Log("Bat hit");
+                BatDamage batDamage = other.GetComponent<BatDamage>();
+                if (batDamage != null)
+                {
+                    batDamage.ApplyDamage(punchDamage);
+                }
+            }
+            else if (other.CompareTag("Slime"))
+            {
+                Debug.Log("Slime hit");
+                SlimeDamage slimeDamage = other.GetComponent<SlimeDamage>();
+                if (slimeDamage != null)
+                {
+                    slimeDamage.ApplyDamage(punchDamage);
+                }
+            }
+        }
     }
 
 
