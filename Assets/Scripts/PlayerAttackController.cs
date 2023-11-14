@@ -5,28 +5,25 @@ public class PlayerAttackController : MonoBehaviour
 {
     private Animator animator;
     private bool isPunching = false; // flag to check if the punch animation is playing
+    public int punchDamage = 33; // damage to apply when punching
+    public GameObject punchCollider; // Assign this in the Inspector to the GameObject with the PunchDamage script
+
+    private PunchDamage punchDamageScript; // Reference to the PunchDamage script
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        punchDamageScript = punchCollider.GetComponent<PunchDamage>(); // Get the PunchDamage script
     }
 
     void Update()
     {
-        // Your existing logic for mouse clicks
-        if (Input.GetMouseButtonDown(0))
-            Debug.Log("Pressed left click.");
-
-        if (Input.GetMouseButtonDown(1))
-            Debug.Log("Pressed right click.");
-
-        if (Input.GetMouseButtonDown(2))
-            Debug.Log("Pressed middle click.");
-
         // Logic for punching
         if (Input.GetButtonDown("Fire1") && !isPunching) // Check if "Fire1" is pressed and if not already punching
-        {
+        {   
             StartCoroutine(PlayPunchAnimation()); // Start the punch animation coroutine
+                                                  // Let the PunchDamage script know the punch has started
+            punchCollider.GetComponent<PunchDamage>().StartPunch();
         }
 
         // Block when the button is held down
@@ -42,7 +39,7 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void Hit()
     {
-        // Your code here, e.g., applying damage to an enemy
+        
     }
 
 
@@ -50,10 +47,12 @@ public class PlayerAttackController : MonoBehaviour
     {
         isPunching = true; // Set the flag to true, indicating the animation is playing
         animator.SetTrigger("PunchRight"); // Using the trigger name as set in Animator Controller
+        punchDamageScript.StartPunch(); // Let the PunchDamage script know the punch has started
 
         // Wait for the duration of the animation to play
         yield return new WaitForSeconds(1.0f);
 
         isPunching = false; // Reset the flag so another punch can be triggered
+        punchDamageScript.EndPunch(); // Let the PunchDamage script know the punch has ended
     }
 }
