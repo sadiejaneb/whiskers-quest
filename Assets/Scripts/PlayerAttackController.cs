@@ -14,16 +14,6 @@ public class PlayerAttackController : MonoBehaviour
 
     void Update()
     {
-        // Your existing logic for mouse clicks
-        if (Input.GetMouseButtonDown(0))
-            Debug.Log("Pressed left click.");
-
-        if (Input.GetMouseButtonDown(1))
-            Debug.Log("Pressed right click.");
-
-        if (Input.GetMouseButtonDown(2))
-            Debug.Log("Pressed middle click.");
-
         // Logic for punching
         if (Input.GetButtonDown("Fire1") && !isPunching) // Check if "Fire1" is pressed and if not already punching
         {
