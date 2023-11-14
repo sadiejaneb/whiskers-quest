@@ -40,6 +40,11 @@ public class PlayerAttackController : MonoBehaviour
             animator.SetBool("IsBlocking", false);
         }
     }
+    public void Hit()
+    {
+        // Your code here, e.g., applying damage to an enemy
+    }
+
 
     private IEnumerator PlayPunchAnimation()
     {
