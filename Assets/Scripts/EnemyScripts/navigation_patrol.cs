@@ -10,17 +10,27 @@ public class navigation_patrol : MonoBehaviour
     public Transform player; // Reference to the player
     public float detectionRange = 10f; // Range within which the player is detected
     public float attackRange = 2f; // Range within which the enemy can attack
+    private Animator animator;
+    private float attackTimer = 0f;
+    public float minAttackDelay = 3f; // Minimum delay between attacks
+    public float maxAttackDelay = 15f; // Maximum delay between attacks
+    private bool isReadyToAttack = false;
+    private const float rotSpeed = 20f;
+    public float stoppingDistance;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
+        animator = GetComponent<Animator>();
         GotoNextPoint();
     }
 
     void GotoNextPoint()
     {
         if (points.Length == 0) return;
+
+        agent.stoppingDistance = 0f; // Reset stopping distance for patrolling
 
         int newDestPoint = 0;
         do
@@ -37,33 +47,57 @@ public class navigation_patrol : MonoBehaviour
         // Check distance to the player
         float distanceToPlayer = Vector3.Distance(player.position, transform.position);
 
+        InstantlyTurn(agent.destination);
+
         if (distanceToPlayer < detectionRange)
         {
             // Player detected, chase the player
             ChasePlayer();
         }
-        else if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        else if (!agent.pathPending && agent.remainingDistance < 0.5f && this.enabled)
         {
             // Continue patrolling
             GotoNextPoint();
         }
 
-        // Check if within attack range
-        if (distanceToPlayer < attackRange)
+        // Update the IsMoving boolean in the Animator
+        animator.SetBool("IsMoving", agent.velocity.magnitude > 0.1f);
+
+        // Update attack timer and check if it's time to attack
+        if (!isReadyToAttack)
         {
-            // Perform attack (you'll need to implement this)
-            AttackPlayer();
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                isReadyToAttack = true;
+                attackTimer = Random.Range(minAttackDelay, maxAttackDelay); // Reset timer for next attack
+            }
         }
+        else if (distanceToPlayer < attackRange)
+        {
+            AttackPlayer();
+            isReadyToAttack = false; // Reset attack readiness after performing attack
+        }
+    }
+    private void InstantlyTurn(Vector3 destination)
+    {
+        //When on target -> dont rotate!
+        if ((destination - transform.position).magnitude < 0.1f) return;
+
+        Vector3 direction = (destination - transform.position).normalized;
+        Quaternion qDir = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, qDir, Time.deltaTime * rotSpeed);
     }
 
     void ChasePlayer()
     {
+        agent.stoppingDistance = stoppingDistance; // Set stopping distance for chasing
         agent.destination = player.position;
     }
 
     void AttackPlayer()
     {
-        // Implement your attack logic here
         Debug.Log("Attacking the player!");
+        animator.SetTrigger("Attack");
     }
 }

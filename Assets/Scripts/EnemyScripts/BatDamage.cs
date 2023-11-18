@@ -4,11 +4,13 @@ using System.Collections;
 public class BatDamage : MonoBehaviour
 {
     private Animator animator;
-    public int health = 100; // Example health value
+    public int health = 100;
+    private navigation_patrol patrolScript;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        patrolScript = GetComponent<navigation_patrol>();
     }
 
     public void ApplyDamage(int damage)
@@ -37,7 +39,10 @@ public class BatDamage : MonoBehaviour
     {
         animator.SetTrigger("IsDead"); // Trigger the death animation
         GetComponent<Collider>().enabled = false; // Disable the Collider
-        //animator.enabled = false; // Disable the Animator
-        
+        if (patrolScript != null)
+        {
+            patrolScript.enabled = false; // Disable the patrol script
+        }
+        animator.SetBool("IsMoving", false);
     }
 }
