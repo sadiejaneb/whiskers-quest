@@ -1171,7 +1171,6 @@ GameObject:
   - component: {fileID: 4026594884437785476}
   - component: {fileID: 553889738415746178}
   - component: {fileID: 8813318681278973212}
-  - component: {fileID: 3907262346959253489}
   - component: {fileID: 2961725983022747724}
   - component: {fileID: 4890596158727678293}
   - component: {fileID: 8206330438179580569}
@@ -1234,18 +1233,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   batCollider: {fileID: 3601090283357448456}
---- !u!114 &3907262346959253489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6610771140590683434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd27f5c4b2200044bd7e01a6f8cefea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &2961725983022747724
 Rigidbody:
   m_ObjectHideFlags: 0
