@@ -15,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
     public void ApplyDamage(int damage)
     {
         currentHealth -= damage;
+        Debug.Log("Player health: " + currentHealth);
         if (currentHealth <= 0)
         {
             // Handle character death

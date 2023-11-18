@@ -751,6 +751,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   punchDamage: 33
   isPunching: 0
+  hitCooldown: 1
+  punchCollider: {fileID: 2143198536496474440}
 --- !u!1 &6767016123391871603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1111685776845466898, guid: a069bf80554068242b83fff53fed8ff9, type: 3}

@@ -6,6 +6,7 @@ public class BatDamage : MonoBehaviour
     private Animator animator;
     public int health = 100;
     private navigation_patrol patrolScript;
+    public Collider batCollider;
 
     void Start()
     {
@@ -38,8 +39,10 @@ public class BatDamage : MonoBehaviour
     private void Die()
     {
         animator.SetTrigger("IsDead"); // Trigger the death animation
-        GetComponent<Collider>().enabled = false; // Disable the Collider
-        if (patrolScript != null)
+        if (batCollider != null)
+        {
+            batCollider.enabled = false; // Disable the specific collider
+        }
         {
             patrolScript.enabled = false; // Disable the patrol script
         }
