@@ -20,9 +20,23 @@ public class navigation_patrol : MonoBehaviour
     public float stoppingDistance;
     public int attackDamage;
     public Collider attackCollider;
+    public AudioClip movingSound; // Sound to be played when IsMoving
+    public AudioClip attackSound; // Sound to be played when attacking
+    public AudioClip damageSound; // Sound to play when damaged
+
+    private AudioSource movementAudioSource;
+    private AudioSource attackAudioSource;
+    private AudioSource damageAudioSource;
 
     void Start()
     {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        movementAudioSource = audioSources[0];
+        attackAudioSource = audioSources.Length > 1 ? audioSources[1] : gameObject.AddComponent<AudioSource>();
+        damageAudioSource = gameObject.AddComponent<AudioSource>(); // Additional AudioSource for damage sound
+
+        movementAudioSource.clip = movingSound;
+
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         animator = GetComponent<Animator>();
@@ -32,6 +46,13 @@ public class navigation_patrol : MonoBehaviour
     {
         attackCollider.enabled = false; // Ensure the attack collider is disabled at start
     }
+    }
+    public void PlayDamageSound()
+    {
+        if (damageSound != null)
+        {
+            damageAudioSource.PlayOneShot(damageSound);
+        }
     }
 
     void GotoNextPoint()
@@ -91,6 +112,21 @@ public class navigation_patrol : MonoBehaviour
                 attackTimer = Random.Range(minAttackDelay, maxAttackDelay); // Reset timer for next attack
             }
         }
+        // Play or stop the moving sound based on movement
+        if (animator.GetBool("IsMoving"))
+        {
+            if (!movementAudioSource.isPlaying)
+            {
+                movementAudioSource.Play();
+            }
+        }
+        else
+        {
+            if (movementAudioSource.isPlaying)
+            {
+                movementAudioSource.Stop();
+            }
+        }
     }
     bool IsDamagedAnimationPlaying()
     {
@@ -123,6 +159,7 @@ public class navigation_patrol : MonoBehaviour
     {
         Debug.Log("Attacking the player!");
         animator.SetTrigger("Attack");
+        
 
         // Immediately set the agent to lunge towards the player
         agent.isStopped = false;
@@ -139,7 +176,16 @@ public class navigation_patrol : MonoBehaviour
         {
             attackCollider.enabled = true;
         }
+        
     }
+    public void PlayAttackSound()
+    {
+        if (attackSound != null)
+        {
+            attackAudioSource.PlayOneShot(attackSound);
+        }
+    }
+
 
     public void DisableAttackCollider()
     {
@@ -166,5 +212,17 @@ public class navigation_patrol : MonoBehaviour
                 playerHealth.ApplyDamage(attackDamage);
             }
         }
+    }
+    public void StopAllSoundsAndDisableAudioSources()
+    {
+        // Stop all sounds
+        if (movementAudioSource.isPlaying) movementAudioSource.Stop();
+        if (attackAudioSource.isPlaying) attackAudioSource.Stop();
+        if (damageAudioSource.isPlaying) damageAudioSource.Stop();
+
+        // Disable audio source components
+        movementAudioSource.enabled = false;
+        attackAudioSource.enabled = false;
+        damageAudioSource.enabled = false;
     }
 }
