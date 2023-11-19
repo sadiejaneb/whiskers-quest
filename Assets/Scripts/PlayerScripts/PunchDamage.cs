@@ -8,23 +8,52 @@ public class PunchDamage : MonoBehaviour
                                  // Start is called before the first frame update
 
     public bool isPunching = false; // Flag to track if the player is currently punching
+    private float lastHitTime = 0f;
+    public float hitCooldown = 1f;
+    public Collider punchCollider;
+
+    void Start()
+    {
+        if (punchCollider != null)
+            punchCollider.enabled = false; // Ensure the collider is disabled at start
+    }
 
     // This method will be called by PlayerAttackController when the punch starts
     public void StartPunch()
     {
         isPunching = true;
+        if (punchCollider != null)
+            punchCollider.enabled = true; // Enable the collider when the punch starts
     }
 
-    // This method will be called by PlayerAttackController when the punch ends
     public void EndPunch()
     {
         isPunching = false;
+        if (punchCollider != null)
+            punchCollider.enabled = false; // Disable the collider when the punch ends
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (!isPunching) return; // If we're not punching, don't do anything
+
+        // Check if enough time has passed since the last hit
+        if (Time.time - lastHitTime < hitCooldown)
+            return;
+
+        // Process hit
+        ProcessHit(collision);
+
+        // Update the last hit time
+        lastHitTime = Time.time;
+
         Debug.Log("Collision Detected with: " + collision.gameObject.name);
+
+    }
+    private void ProcessHit(Collision collision)
+    {
         if (isPunching)
+        {
             if (collision.gameObject.CompareTag("Bat"))
             {
                 Debug.Log("Bat hit");
@@ -43,5 +72,15 @@ public class PunchDamage : MonoBehaviour
                     slimeDamage.ApplyDamage(punchDamage);
                 }
             }
+            else if (collision.gameObject.CompareTag("Ghost"))
+            {
+                Debug.Log("Ghost hit");
+                GhostDamage ghostDamage = collision.gameObject.GetComponent<GhostDamage>();
+                if (ghostDamage != null)
+                {
+                    ghostDamage.ApplyDamage(punchDamage);
+                }
+            }
         }
     }
+}
