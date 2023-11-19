@@ -35,7 +35,6 @@ public class PunchDamage : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Current Time: " + Time.time + ", Last Hit Time: " + lastHitTime);
         if (!isPunching) return; // If we're not punching, don't do anything
 
         // Check if enough time has passed since the last hit

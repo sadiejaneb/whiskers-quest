@@ -391,9 +391,9 @@ MonoBehaviour:
   player: {fileID: 0}
   detectionRange: 20
   attackRange: 5
-  minAttackDelay: 2
-  maxAttackDelay: 10
-  stoppingDistance: 2
+  minAttackDelay: 1
+  maxAttackDelay: 7
+  stoppingDistance: 3
   attackDamage: 20
   attackCollider: {fileID: 7095911256359877793}
 --- !u!195 &5025430647865975887
@@ -541,14 +541,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4856850861045862222}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.968347, y: -0.24960789, z: -6.534701e-17, w: -8.0078184e-17}
+  m_LocalRotation: {x: 0.96820617, y: -0.2501537, z: -6.746107e-17, w: -8.082775e-17}
   m_LocalPosition: {x: -0.005807207, y: 6.245004e-19, z: 9.860761e-34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8843202315048350055}
   m_Father: {fileID: 656063303268930859}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -5.496131e-15, y: 180, z: -174.61763}
 --- !u!1 &4962667256691483498
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +607,7 @@ Transform:
   m_GameObject: {fileID: 4966128707127431678}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.00595, z: -0.00097}
+  m_LocalPosition: {x: 0, y: 0.00779, z: -0.00097}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -632,7 +632,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.01, y: 0.004, z: 0.006}
+  m_Size: {x: 0.01, y: 0.01, z: 0.006}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5914510772896881053
 GameObject:
@@ -727,7 +727,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1394305802700076369}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -23.526299, y: 0, z: 0}
 --- !u!1 &8390997674036025641
 GameObject:
   m_ObjectHideFlags: 0

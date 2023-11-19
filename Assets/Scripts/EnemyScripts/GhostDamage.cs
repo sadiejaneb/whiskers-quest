@@ -35,6 +35,18 @@ public class GhostDamage : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         animator.ResetTrigger("IsDamaged");
     }
+    bool CanAttack()
+    {
+        // Check if the IsDamaged animation is playing
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 for the base layer
+        if (stateInfo.IsName("IsDamaged"))
+        {
+            return false; // Cannot attack if IsDamaged is playing
+        }
+
+        // Add other conditions for attacking, if any
+        return true; // Can attack if not in IsDamaged state
+    }
 
     private void Die()
     {
@@ -44,6 +56,15 @@ public class GhostDamage : MonoBehaviour
         {
             patrolScript.enabled = false; // Disable the patrol script
         }
+
+        // Disable Rigidbody if exists
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true; // Prevent further physics interactions
+            rb.velocity = Vector3.zero; // Stop any residual movement
+        }
+
         animator.SetBool("IsMoving", false);
     }
 }
