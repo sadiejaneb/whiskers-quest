@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SlimeDamage : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class SlimeDamage : MonoBehaviour
         {
             Die();
         }
+
+        if (patrolScript != null) 
+        {
+            patrolScript.PlayDamageSound();
+        }
     }
 
     private void Die()
@@ -29,8 +35,33 @@ public class SlimeDamage : MonoBehaviour
         GetComponent<Collider>().enabled = false; // Disable the Collider
         if (patrolScript != null)
         {
-            patrolScript.enabled = false; // Disable the patrol script
+            // Stop and disable all audio sources
+            // Delay stopping and disabling all audio sources
+            StartCoroutine(DisableSoundsAfterDelay());
         }
+
+        // Disable Rigidbody if exists
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true; // Prevent further physics interactions
+            rb.velocity = Vector3.zero; // Stop any residual movement
+        }
+
         animator.SetBool("IsMoving", false);
+    }
+    private IEnumerator DisableSoundsAfterDelay()
+    {
+        // Wait for the length of the damage sound
+        // Assuming the damage sound is approximately 1 second long
+        yield return new WaitForSeconds(1.0f);
+
+        // Now stop and disable all audio sources
+        patrolScript.StopAllSoundsAndDisableAudioSources();
+        patrolScript.enabled = false; // Disable the patrol script
+        if (patrolScript.GetComponent<NavMeshAgent>() != null)
+        {
+            patrolScript.GetComponent<NavMeshAgent>().enabled = false; // Disable NavMeshAgent
+        }
     }
 }

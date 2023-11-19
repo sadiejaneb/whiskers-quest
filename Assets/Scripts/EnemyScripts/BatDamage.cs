@@ -26,6 +26,10 @@ public class BatDamage : MonoBehaviour
         {
             StartCoroutine(TriggerDamageAnimation());
         }
+        if (patrolScript != null)
+        {
+            patrolScript.PlayDamageSound();
+        }
     }
 
     private IEnumerator TriggerDamageAnimation()
@@ -36,35 +40,31 @@ public class BatDamage : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         animator.ResetTrigger("IsDamaged");
     }
-    bool CanAttack()
-    {
-        // Check if the IsDamaged animation is playing
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 for the base layer
-        if (stateInfo.IsName("IsDamaged"))
-        {
-            return false; // Cannot attack if IsDamaged is playing
-        }
+    // bool CanAttack()
+    // {
+    //     // Check if the IsDamaged animation is playing
+    //     AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 for the base layer
+    //     if (stateInfo.IsName("IsDamaged"))
+    //     {
+    //         return false; // Cannot attack if IsDamaged is playing
+    //     }
 
-        // Add other conditions for attacking, if any
-        return true; // Can attack if not in IsDamaged state
-    }
+    //     // Add other conditions for attacking, if any
+    //     return true; // Can attack if not in IsDamaged state
+    // }
 
     private void Die()
     {
         animator.SetTrigger("IsDead"); // Trigger the death animation
-
         if (batCollider != null)
         {
             batCollider.enabled = false; // Disable the specific collider
         }
-
         if (patrolScript != null)
         {
+            // Delay stopping and disabling all audio sources
+            StartCoroutine(DisableSoundsAfterDelay());
             patrolScript.enabled = false; // Disable the patrol script
-            if (patrolScript.GetComponent<NavMeshAgent>() != null)
-            {
-                patrolScript.GetComponent<NavMeshAgent>().enabled = false; // Disable NavMeshAgent
-            }
         }
 
         // Disable Rigidbody if exists
@@ -76,5 +76,19 @@ public class BatDamage : MonoBehaviour
         }
 
         animator.SetBool("IsMoving", false);
+    }
+    private IEnumerator DisableSoundsAfterDelay()
+    {
+        // Wait for the length of the damage sound
+        // Assuming the damage sound is approximately 1 second long
+        yield return new WaitForSeconds(1.0f);
+
+        // Now stop and disable all audio sources
+        patrolScript.StopAllSoundsAndDisableAudioSources();
+        patrolScript.enabled = false; // Disable the patrol script
+        if (patrolScript.GetComponent<NavMeshAgent>() != null)
+        {
+            patrolScript.GetComponent<NavMeshAgent>().enabled = false; // Disable NavMeshAgent
+        }
     }
 }
