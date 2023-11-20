@@ -1203,8 +1203,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1517308112}
     - target: {fileID: 5026055284222968340, guid: a7ec3e68da044d545bbbcf00c3fb95c3, type: 3}
-      propertyPath: attackCollider
-      value: 
+      propertyPath: stoppingDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5026055284222968340, guid: a7ec3e68da044d545bbbcf00c3fb95c3, type: 3}
       propertyPath: points.Array.data[0]
@@ -1231,6 +1231,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 325941475}
     m_Modifications:
+    - target: {fileID: 2961725983022747724, guid: cf8c84ec145b0224cac63c90928680a6, type: 3}
+      propertyPath: m_Constraints
+      value: 36
+      objectReference: {fileID: 0}
     - target: {fileID: 4026594884437785476, guid: cf8c84ec145b0224cac63c90928680a6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 15.857193
@@ -1626,10 +1630,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1517308112}
-    - target: {fileID: 8854370214493408180, guid: fbec1c3db7a35ae47bddf3aaf384a220, type: 3}
-      propertyPath: attackCollider
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8854370214493408180, guid: fbec1c3db7a35ae47bddf3aaf384a220, type: 3}
       propertyPath: points.Array.data[0]
       value: 
