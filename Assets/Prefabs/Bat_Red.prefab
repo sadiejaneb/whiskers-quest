@@ -1284,7 +1284,7 @@ MonoBehaviour:
   attackRange: 5
   minAttackDelay: 1
   maxAttackDelay: 7
-  stoppingDistance: 2
+  stoppingDistance: 1
   attackDamage: 10
   attackCollider: {fileID: 3571805760858498056}
   movingSound: {fileID: 8300000, guid: 46986d9468e3fad4a834dc5dc0662c34, type: 3}

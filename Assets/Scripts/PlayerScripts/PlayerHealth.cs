@@ -8,9 +8,12 @@ public class PlayerHealth : MonoBehaviour
     private int currentHealth;
     private Animator animator;
     private PlayerAttackController attackController;
+    public UIManager uiManager;
+    public bool IsAlive { get; private set; } = true;
 
     void Start()
     {
+        IsAlive = true;
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         attackController = GetComponent<PlayerAttackController>();
@@ -52,9 +55,21 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.4f); // Wait
         attackController.PlayDamageSound();
     }
-
     public void Die()
     {
-        Debug.Log("Player died");
+        IsAlive = false;
+
+        // Disable the collider
+        Collider playerCollider = GetComponent<Collider>();
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = false;
+        }
+
+        // Continue with showing the game over UI
+        if (uiManager != null)
+        {
+            uiManager.ShowGameOver(); // Show the game over text and start the fade out
+        }
     }
 }
