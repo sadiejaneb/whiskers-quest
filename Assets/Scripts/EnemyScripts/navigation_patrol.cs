@@ -157,22 +157,26 @@ public class navigation_patrol : MonoBehaviour
 
     void AttackPlayer()
     {
-        Debug.Log("Attacking the player!");
-        animator.SetTrigger("Attack");
+        PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+        if (playerHealth != null && playerHealth.IsAlive)
+        {
+            Debug.Log("Attacking the player!");
+            animator.SetTrigger("Attack");
 
-        // Calculate lunge distance
-        float distanceToPlayer = Vector3.Distance(player.position, transform.position);
-        float lungeDistance = Mathf.Min(4f, distanceToPlayer - stoppingDistance);
+            // Calculate lunge distance
+            float distanceToPlayer = Vector3.Distance(player.position, transform.position);
+            float lungeDistance = Mathf.Min(4f, distanceToPlayer - stoppingDistance);
 
-        // Target position for the lunge
-        Vector3 lungeTarget = transform.position + (player.position - transform.position).normalized * lungeDistance;
+            // Target position for the lunge
+            Vector3 lungeTarget = transform.position + (player.position - transform.position).normalized * lungeDistance;
 
-        // Immediately set the agent to lunge towards the player
-        agent.isStopped = false;
-        agent.stoppingDistance = 0f; // No stopping distance during attack
-        agent.speed = 15f; // Increased speed for the lunge
-        agent.acceleration = 35f; // Higher acceleration for immediate response
-        agent.destination = lungeTarget; // Lunge towards the target position
+            // Immediately set the agent to lunge towards the player
+            agent.isStopped = false;
+            agent.stoppingDistance = 0f; // No stopping distance during attack
+            agent.speed = 15f; // Increased speed for the lunge
+            agent.acceleration = 35f; // Higher acceleration for immediate response
+            agent.destination = lungeTarget; // Lunge towards the target position
+        }
     }
 
     public void EnableAttackCollider()
