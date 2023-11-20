@@ -158,7 +158,7 @@ MonoBehaviour:
   maxAttackDelay: 7
   stoppingDistance: 2
   attackDamage: 10
-  attackCollider: {fileID: 6928723255479183134}
+  attackCollider: {fileID: 0}
   movingSound: {fileID: 8300000, guid: 75b8e62020d45db4da69430aba105ede, type: 3}
   attackSound: {fileID: 8300000, guid: 1aae02a619be7de4f9d7045b1a86444a, type: 3}
   damageSound: {fileID: 8300000, guid: ce73f56a1d07f49428cbbc1b3466e001, type: 3}
@@ -689,7 +689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3561148725019403436}
-  - component: {fileID: 6928723255479183134}
+  - component: {fileID: 1797982648444086367}
   m_Layer: 8
   m_Name: AttackCollider
   m_TagString: Untagged
@@ -706,14 +706,14 @@ Transform:
   m_GameObject: {fileID: 6782036148558282658}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.00846, z: 0.00568}
+  m_LocalPosition: {x: 0, y: -0.0083, z: 0.00111}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5287809504247846173}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6928723255479183134
-BoxCollider:
+--- !u!135 &1797982648444086367
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -731,7 +731,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.01, y: 0.005, z: 0.005}
+  m_Radius: 0.007
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7232255700711690870
 GameObject:

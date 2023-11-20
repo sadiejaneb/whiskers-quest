@@ -9,9 +9,20 @@ public class PlayerAttackController : MonoBehaviour
     public GameObject punchCollider; // Assign this in the Inspector to the GameObject with the PunchDamage script
 
     private PunchDamage punchDamageScript; // Reference to the PunchDamage script
+    private AudioSource attackAudioSource;
+    private AudioSource damageAudioSource;
+    private AudioSource deathAudioSource;
+    public AudioClip deathSound; // Sound to be played when dying
+    public AudioClip attackSound; // Sound to be played when attacking
+    public AudioClip damageSound; // Sound to play when damaged
 
     void Start()
     {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        attackAudioSource = audioSources.Length > 0 ? audioSources[1] : gameObject.AddComponent<AudioSource>();
+        damageAudioSource = gameObject.AddComponent<AudioSource>(); // Additional AudioSource for damage sound
+        deathAudioSource = gameObject.AddComponent<AudioSource>(); // Additional AudioSource for death sound
+
         animator = GetComponent<Animator>();
         punchDamageScript = punchCollider.GetComponent<PunchDamage>(); // Get the PunchDamage script
     }
@@ -37,11 +48,28 @@ public class PlayerAttackController : MonoBehaviour
             animator.SetBool("IsBlocking", false);
         }
     }
-    public void Hit()
-    {
-        
-    }
 
+    public void PlayAttackSound()
+    {
+        if (attackSound != null)
+        {
+            attackAudioSource.PlayOneShot(attackSound);
+        }
+    }
+    public void PlayDamageSound()
+    {
+        if (damageSound != null)
+        {
+            damageAudioSource.PlayOneShot(damageSound);
+        }
+    }
+    public void PlayDeathSound()
+    {
+        if (deathSound != null)
+        {
+            deathAudioSource.PlayOneShot(deathSound);
+        }
+    }
 
     private IEnumerator PlayPunchAnimation()
     {
