@@ -8,6 +8,7 @@ TagManager:
   - Bat
   - Slime
   - Ghost
+  - Star
   layers:
   - Default
   - TransparentFX

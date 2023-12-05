@@ -1,41 +1,38 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
 public class SimpleCollectibleScript : MonoBehaviour
 {
+    public enum CollectibleTypes { NoType, Type1, Type2, Type3, Type4, Type5 };
 
-    public enum CollectibleTypes { NoType, Type1, Type2, Type3, Type4, Type5 }; // you can replace this with your own labels for the types of collectibles in your game!
-
-    public CollectibleTypes CollectibleType; // this gameObject's type
-
-    public bool rotate; // do you want it to rotate?
-
+    public CollectibleTypes CollectibleType;
+    public bool rotate;
     public float rotationSpeed;
-
     public AudioClip collectSound;
-
     public GameObject collectEffect;
+    public Text powerUpText;
 
-    // Use this for initialization
+    private bool isCounting = false;
+
     void Start()
     {
-
+        if (powerUpText != null)
+        {
+            powerUpText.text = "Power Up: 10";
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         if (rotate)
             transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
-
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             Collect();
         }
@@ -48,51 +45,51 @@ public class SimpleCollectibleScript : MonoBehaviour
         if (collectEffect)
             Instantiate(collectEffect, transform.position, Quaternion.identity);
 
-        //Below is space to add in your code for what happens based on the collectible type
+        Debug.Log("Collectible collected: " + CollectibleType.ToString());
 
-        if (CollectibleType == CollectibleTypes.NoType)
+        // Check if it's Type1 and the countdown is not already active
+        if (CollectibleType == CollectibleTypes.Type1 && !isCounting)
         {
-
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
+            StartCoroutine(StartCountdown());
         }
-        if (CollectibleType == CollectibleTypes.Type1)
+        else if (CollectibleType == CollectibleTypes.Type1 && isCounting)
         {
-
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
+            // If another Type1 is collected while counting, 
+            // you can add any specific behavior here if needed
         }
-        if (CollectibleType == CollectibleTypes.Type2)
+        else
         {
-
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
+            Destroy(gameObject); // Instantly destroy for other types
         }
-        if (CollectibleType == CollectibleTypes.Type3)
+    }
+
+    IEnumerator StartCountdown()
+    {
+        isCounting = true;
+        float countdownTimer = 10f;
+
+        while (countdownTimer > 0)
         {
+            yield return new WaitForSeconds(1.0f);
+            countdownTimer--;
 
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
-        }
-        if (CollectibleType == CollectibleTypes.Type4)
-        {
-
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
-        }
-        if (CollectibleType == CollectibleTypes.Type5)
-        {
-
-            //Add in code here;
-
-            Debug.Log("Do NoType Command");
+            if (powerUpText != null)
+            {
+                powerUpText.text = "Power Up: " + Mathf.CeilToInt(countdownTimer).ToString();
+            }
         }
 
-        Destroy(gameObject);
+        isCounting = false;
+        Debug.Log("Type1 countdown timer reached zero!");
+        PerformType1Action();
+        Destroy(gameObject); // Destroy after countdown for Type1
+    }
+
+    void PerformType1Action()
+    {
+        // Implement the action to be performed when the Type1 countdown reaches zero
+        // For example:
+        Debug.Log("Performing Type1 action!");
+        // Your logic here...
     }
 }
