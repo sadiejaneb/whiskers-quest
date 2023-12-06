@@ -4,40 +4,67 @@ using UnityEngine;
 public class PlayerAttackController : MonoBehaviour
 {
     private Animator animator;
-    private bool isPunching = false; // flag to check if the punch animation is playing
-    public int punchDamage = 33; // damage to apply when punching
-    public GameObject punchCollider; // Assign this in the Inspector to the GameObject with the PunchDamage script
+    private bool isPunching = false;
+    public int punchDamage = 33;
+    public GameObject punchCollider;
+    private float attackRange = 2.0f; // Adjust this value to match your attack range
 
-    private PunchDamage punchDamageScript; // Reference to the PunchDamage script
+    private PunchDamage punchDamageScript;
     private AudioSource attackAudioSource;
     private AudioSource damageAudioSource;
     private AudioSource deathAudioSource;
-    public AudioClip deathSound; // Sound to be played when dying
-    public AudioClip attackSound; // Sound to be played when attacking
-    public AudioClip damageSound; // Sound to play when damaged
+    public AudioClip deathSound;
+    public AudioClip attackSound;
+    public AudioClip damageSound;
+
+    private bool hasCollectedStar = false;
+    private float starCollectDuration = 10.0f;
+    private float starEffectTimer = 0.0f;
+
+    private SimpleCollectibleScript collectibleScript;
 
     void Start()
     {
         AudioSource[] audioSources = GetComponents<AudioSource>();
         attackAudioSource = audioSources.Length > 0 ? audioSources[1] : gameObject.AddComponent<AudioSource>();
-        damageAudioSource = gameObject.AddComponent<AudioSource>(); // Additional AudioSource for damage sound
-        deathAudioSource = gameObject.AddComponent<AudioSource>(); // Additional AudioSource for death sound
+        damageAudioSource = gameObject.AddComponent<AudioSource>();
+        deathAudioSource = gameObject.AddComponent<AudioSource>();
 
         animator = GetComponent<Animator>();
-        punchDamageScript = punchCollider.GetComponent<PunchDamage>(); // Get the PunchDamage script
+        punchDamageScript = punchCollider.GetComponent<PunchDamage>();
+
+        collectibleScript = FindObjectOfType<SimpleCollectibleScript>();
     }
 
     void Update()
     {
-        // Logic for punching
-        if (Input.GetButtonDown("Fire1") && !isPunching) // Check if "Fire1" is pressed and if not already punching
-        {   
-            StartCoroutine(PlayPunchAnimation()); // Start the punch animation coroutine
-                                                  // Let the PunchDamage script know the punch has started
-            punchCollider.GetComponent<PunchDamage>().StartPunch();
+        if (hasCollectedStar)
+        {
+            starEffectTimer += Time.deltaTime;
+            if (starEffectTimer >= starCollectDuration)
+            {
+                hasCollectedStar = false;
+                starEffectTimer = 0.0f;
+            }
+            else
+            {
+                hasCollectedStar = true;
+            }
         }
 
-        // Block when the button is held down
+        if (Input.GetButtonDown("Fire1") && !isPunching)
+        {
+            if (hasCollectedStar)
+            {
+                ApplyInstantKill();
+            }
+            else
+            {
+                StartCoroutine(PlayPunchAnimation());
+                punchCollider.GetComponent<PunchDamage>().StartPunch();
+            }
+        }
+
         if (Input.GetButtonDown("Block"))
         {
             animator.SetBool("IsBlocking", true);
@@ -49,6 +76,18 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
+    void ApplyInstantKill()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                Destroy(collider.gameObject);
+            }
+        }
+    }
+
     public void PlayAttackSound()
     {
         if (attackSound != null)
@@ -56,6 +95,7 @@ public class PlayerAttackController : MonoBehaviour
             attackAudioSource.PlayOneShot(attackSound);
         }
     }
+
     public void PlayDamageSound()
     {
         if (damageSound != null)
@@ -63,6 +103,7 @@ public class PlayerAttackController : MonoBehaviour
             damageAudioSource.PlayOneShot(damageSound);
         }
     }
+
     public void PlayDeathSound()
     {
         if (deathSound != null)
@@ -73,14 +114,19 @@ public class PlayerAttackController : MonoBehaviour
 
     private IEnumerator PlayPunchAnimation()
     {
-        isPunching = true; // Set the flag to true, indicating the animation is playing
-        animator.SetTrigger("PunchRight"); // Using the trigger name as set in Animator Controller
-        punchDamageScript.StartPunch(); // Let the PunchDamage script know the punch has started
+        isPunching = true;
+        animator.SetTrigger("PunchRight");
+        punchDamageScript.StartPunch();
 
-        // Wait for the duration of the animation to play
         yield return new WaitForSeconds(1.0f);
 
-        isPunching = false; // Reset the flag so another punch can be triggered
-        punchDamageScript.EndPunch(); // Let the PunchDamage script know the punch has ended
+        isPunching = false;
+        punchDamageScript.EndPunch();
+    }
+
+    public void UpdatePlayerDamage(int newDamage)
+    {
+        punchDamage = newDamage;
+        hasCollectedStar = true;
     }
 }

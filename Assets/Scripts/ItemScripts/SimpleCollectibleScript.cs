@@ -15,12 +15,23 @@ public class SimpleCollectibleScript : MonoBehaviour
     public Text powerUpText;
 
     private bool isCounting = false;
+    private float initialCountdownValue = 10f;
+    private float countdownTimer;
+
+    private PlayerAttackController playerAttackController;
 
     void Start()
     {
+        ResetCountdown();
+        playerAttackController = FindObjectOfType<PlayerAttackController>();
+    }
+
+    void ResetCountdown()
+    {
+        countdownTimer = initialCountdownValue;
         if (powerUpText != null)
         {
-            powerUpText.text = "Power Up: 10";
+            powerUpText.text = "Power Up: " + Mathf.CeilToInt(countdownTimer).ToString();
         }
     }
 
@@ -47,27 +58,17 @@ public class SimpleCollectibleScript : MonoBehaviour
 
         Debug.Log("Collectible collected: " + CollectibleType.ToString());
 
-        // Check if it's Type1 and the countdown is not already active
-        if (CollectibleType == CollectibleTypes.Type1 && !isCounting)
+        if (!isCounting)
         {
+            isCounting = true;
             StartCoroutine(StartCountdown());
         }
-        else if (CollectibleType == CollectibleTypes.Type1 && isCounting)
-        {
-            // If another Type1 is collected while counting, 
-            // you can add any specific behavior here if needed
-        }
-        else
-        {
-            Destroy(gameObject); // Instantly destroy for other types
-        }
+
+        ResetCountdown();
     }
 
     IEnumerator StartCountdown()
     {
-        isCounting = true;
-        float countdownTimer = 10f;
-
         while (countdownTimer > 0)
         {
             yield return new WaitForSeconds(1.0f);
@@ -80,16 +81,14 @@ public class SimpleCollectibleScript : MonoBehaviour
         }
 
         isCounting = false;
-        Debug.Log("Type1 countdown timer reached zero!");
-        PerformType1Action();
-        Destroy(gameObject); // Destroy after countdown for Type1
+        Debug.Log("Countdown timer reached zero!");
+        PerformAction();
+        Destroy(gameObject);
     }
 
-    void PerformType1Action()
+    void PerformAction()
     {
-        // Implement the action to be performed when the Type1 countdown reaches zero
-        // For example:
-        Debug.Log("Performing Type1 action!");
-        // Your logic here...
+        playerAttackController.UpdatePlayerDamage(100);
+        ResetCountdown();
     }
 }
