@@ -11,10 +11,14 @@ public class PlayerHealth : MonoBehaviour
     public UIManager uiManager;
     public bool IsAlive { get; private set; } = true;
 
+
+    public HealthBar healthBar;
+
     void Start()
     {
         IsAlive = true;
         currentHealth = maxHealth;
+        healthBar.SetHealth(maxHealth); // set health bar to max health at beginning
         animator = GetComponent<Animator>();
         attackController = GetComponent<PlayerAttackController>();
     }
@@ -28,6 +32,7 @@ public class PlayerHealth : MonoBehaviour
         int damageTaken = isBlocking ? damage / 2 : damage;
 
         currentHealth -= damageTaken;
+        healthBar.SetHealth(currentHealth);
         Debug.Log("Player health: " + currentHealth);
 
         if (currentHealth > 0)
