@@ -23,6 +23,7 @@ public class PlayerAttackController : MonoBehaviour
     private float starEffectTimer = 0.0f;
 
     private SimpleCollectibleScript collectibleScript;
+    private int originalPunchDamage;
 
     void Start()
     {
@@ -35,6 +36,8 @@ public class PlayerAttackController : MonoBehaviour
         punchDamageScript = punchCollider.GetComponent<PunchDamage>();
 
         collectibleScript = FindObjectOfType<SimpleCollectibleScript>();
+
+        originalPunchDamage = punchDamage; // store original damage
     }
 
     void Update()
@@ -55,15 +58,8 @@ public class PlayerAttackController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") && !isPunching)
         {
-            if (hasCollectedStar)
-            {
-                ApplyInstantKill();
-            }
-            else
-            {
                 StartCoroutine(PlayPunchAnimation());
                 punchCollider.GetComponent<PunchDamage>().StartPunch();
-            }
         }
 
         if (Input.GetButtonDown("Block"))
@@ -77,17 +73,6 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    void ApplyInstantKill()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-        foreach (Collider collider in hitColliders)
-        {
-            if (collider.CompareTag("Enemy"))
-            {
-                Destroy(collider.gameObject);
-            }
-        }
-    }
 
     public void PlayAttackSound()
     {
@@ -127,7 +112,21 @@ public class PlayerAttackController : MonoBehaviour
 
     public void UpdatePlayerDamage(int newDamage)
     {
+        Debug.Log("Updating player damage to: " + newDamage);
         punchDamage = newDamage;
+        Debug.Log("Player damage now: " + punchDamage); // Additional Debug
         hasCollectedStar = true;
+        starEffectTimer = 0.0f;
+    }
+
+    public void RevertPlayerDamage()
+    {
+        punchDamage = originalPunchDamage;
+        hasCollectedStar = false;
+        Debug.Log("Player damage reverted to " + originalPunchDamage);
+    }
+    public int GetCurrentPunchDamage()
+    {
+        return punchDamage;
     }
 }
