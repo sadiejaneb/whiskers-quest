@@ -1,10 +1,11 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public TextMeshProUGUI killText;
+    public TMP_Text killText;
+    public TMP_Text collectionText;
     public Text winText;
 
     private int killCount = 0;
@@ -35,12 +36,14 @@ public class GameManager : MonoBehaviour
     public void EnemyKilled()
     {
         killCount++;
+        Debug.Log(killCount.ToString());
         UpdateKillText();
     }
 
     public void GemCollected()
     {
         gemsCollected++;
+        UpdateCollectionText();
 
         if (gemsCollected >= totalGems)
         {
@@ -49,6 +52,13 @@ public class GameManager : MonoBehaviour
                 winText.text = "You Win!";
                 winText.enabled = true;
             }
+        }
+    }
+    void UpdateCollectionText()
+    {
+        if (collectionText != null)
+        {
+            collectionText.text = "Gems: " + gemsCollected;
         }
     }
 }
