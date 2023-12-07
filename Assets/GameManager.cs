@@ -1,17 +1,27 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI killText;
+    public Text winText;
+
     private int killCount = 0;
+    private int totalGems = 6;
+    private int gemsCollected = 0;
 
     void Start()
     {
-        // Ensure you've assigned the TextMeshPro component in the Inspector
+        // Ensure you've assigned the TextMeshPro and UI Text components in the Inspector
         if (killText == null)
         {
             Debug.LogError("TextMeshPro component is not assigned!");
+        }
+
+        if (winText != null)
+        {
+            winText.enabled = false;
         }
 
         UpdateKillText();
@@ -19,15 +29,26 @@ public class GameManager : MonoBehaviour
 
     void UpdateKillText()
     {
-        // Update the text to display the current kill count
         killText.text = "Kills: " + killCount.ToString();
     }
 
-    // Call this method when an enemy is killed
     public void EnemyKilled()
     {
         killCount++;
-        Debug.Log(killCount.ToString());
         UpdateKillText();
+    }
+
+    public void GemCollected()
+    {
+        gemsCollected++;
+
+        if (gemsCollected >= totalGems)
+        {
+            if (winText != null)
+            {
+                winText.text = "You Win!";
+                winText.enabled = true;
+            }
+        }
     }
 }
