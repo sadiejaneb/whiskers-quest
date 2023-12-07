@@ -24,17 +24,17 @@ public class SimpleCollectibleScript : MonoBehaviour
     {
         ResetCountdown();
         playerAttackController = FindObjectOfType<PlayerAttackController>();
+        if (playerAttackController == null)
+        {
+            Debug.LogError("PlayerAttackController not found!");
+        }
     }
 
     void ResetCountdown()
     {
         countdownTimer = initialCountdownValue;
-        if (powerUpText != null)
-        {
-            powerUpText.text = "Power Up: " + Mathf.CeilToInt(countdownTimer).ToString();
-        }
+        UpdatePowerUpText();
     }
-
     void Update()
     {
         if (rotate)
@@ -60,11 +60,13 @@ public class SimpleCollectibleScript : MonoBehaviour
 
         if (!isCounting)
         {
+            playerAttackController.UpdatePlayerDamage(100);
+            Debug.Log("Punch Damage after collecting power-up: " + playerAttackController.GetCurrentPunchDamage()); // Add this line
+
+            ResetCountdown();
             isCounting = true;
             StartCoroutine(StartCountdown());
         }
-
-        ResetCountdown();
     }
 
     IEnumerator StartCountdown()
@@ -73,22 +75,19 @@ public class SimpleCollectibleScript : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
             countdownTimer--;
-
-            if (powerUpText != null)
-            {
-                powerUpText.text = "Power Up: " + Mathf.CeilToInt(countdownTimer).ToString();
-            }
+            UpdatePowerUpText();
         }
 
         isCounting = false;
-        Debug.Log("Countdown timer reached zero!");
-        PerformAction();
-        Destroy(gameObject);
+        playerAttackController.RevertPlayerDamage();
+        Debug.Log("Power-up effect ended, reverting player damage to original value.");
     }
 
-    void PerformAction()
+    void UpdatePowerUpText()
     {
-        playerAttackController.UpdatePlayerDamage(100);
-        ResetCountdown();
+        if (powerUpText != null)
+        {
+            powerUpText.text = "Power Up: " + Mathf.CeilToInt(countdownTimer).ToString();
+        }
     }
 }

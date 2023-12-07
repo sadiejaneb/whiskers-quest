@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class PunchDamage : MonoBehaviour
 {
-    public int punchDamage = 33; // damage to apply when punching
-                                 // Start is called before the first frame update
 
     public bool isPunching = false; // Flag to track if the player is currently punching
     private float lastHitTime = 0f;
     public float hitCooldown = 1f;
     public Collider punchCollider;
+    private PlayerAttackController playerAttackController;
 
     void Start()
     {
+        playerAttackController = FindObjectOfType<PlayerAttackController>(); // Find and assign the PlayerAttackController
         if (punchCollider != null)
-            punchCollider.enabled = false; // Ensure the collider is disabled at start
+            punchCollider.enabled = false;
     }
 
     // This method will be called by PlayerAttackController when the punch starts
@@ -54,13 +54,14 @@ public class PunchDamage : MonoBehaviour
     {
         if (isPunching)
         {
+            int currentPunchDamage = playerAttackController.punchDamage;
             if (collision.gameObject.CompareTag("Bat"))
             {
                 Debug.Log("Bat hit");
                 BatDamage batDamage = collision.gameObject.GetComponent<BatDamage>();
                 if (batDamage != null)
                 {
-                    batDamage.ApplyDamage(punchDamage);
+                    batDamage.ApplyDamage(currentPunchDamage);
                 }
             }
             else if (collision.gameObject.CompareTag("Slime"))
@@ -69,7 +70,7 @@ public class PunchDamage : MonoBehaviour
                 SlimeDamage slimeDamage = collision.gameObject.GetComponent<SlimeDamage>();
                 if (slimeDamage != null)
                 {
-                    slimeDamage.ApplyDamage(punchDamage);
+                    slimeDamage.ApplyDamage(currentPunchDamage);
                 }
             }
             else if (collision.gameObject.CompareTag("Ghost"))
@@ -78,7 +79,7 @@ public class PunchDamage : MonoBehaviour
                 GhostDamage ghostDamage = collision.gameObject.GetComponent<GhostDamage>();
                 if (ghostDamage != null)
                 {
-                    ghostDamage.ApplyDamage(punchDamage);
+                    ghostDamage.ApplyDamage(currentPunchDamage);
                 }
             }
         }
