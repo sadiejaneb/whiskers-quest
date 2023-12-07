@@ -9,6 +9,8 @@ public class BatDamage : MonoBehaviour
     private navigation_patrol patrolScript;
     public Collider batCollider;
 
+    public GameManager gameManager;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -74,7 +76,7 @@ public class BatDamage : MonoBehaviour
             rb.isKinematic = true; // Prevent further physics interactions
             rb.velocity = Vector3.zero; // Stop any residual movement
         }
-
+        gameManager.EnemyKilled();
         animator.SetBool("IsMoving", false);
     }
     private IEnumerator DisableSoundsAfterDelay()

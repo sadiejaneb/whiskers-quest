@@ -202,7 +202,7 @@ public class navigation_patrol : MonoBehaviour
         {
             attackCollider.enabled = false;
         }
-        // Reset the stopping distance back to the original value
+        // Reset the stopping disqtance back to the original value
         agent.stoppingDistance = stoppingDistance;
 
         
