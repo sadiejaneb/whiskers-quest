@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(AudioSource))]
 public class SimpleCollectibleScript : MonoBehaviour
@@ -12,7 +13,7 @@ public class SimpleCollectibleScript : MonoBehaviour
     public float rotationSpeed;
     public AudioClip collectSound;
     public GameObject collectEffect;
-    public Text powerUpText;
+    public TMP_Text powerUpText;
 
     private bool isCounting = false;
     private float initialCountdownValue = 10f;

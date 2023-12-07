@@ -7,6 +7,7 @@ public class SlimeDamage : MonoBehaviour
 {
     private Animator animator;
     public int health = 100;
+    public GameManager gameManager;
     private navigation_patrol patrolScript;
 
     void Start()
@@ -47,7 +48,7 @@ public class SlimeDamage : MonoBehaviour
             rb.isKinematic = true; // Prevent further physics interactions
             rb.velocity = Vector3.zero; // Stop any residual movement
         }
-
+        gameManager.EnemyKilled();
         animator.SetBool("IsMoving", false);
     }
     private IEnumerator DisableSoundsAfterDelay()
